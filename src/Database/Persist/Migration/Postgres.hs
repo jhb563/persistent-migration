@@ -17,6 +17,7 @@ module Database.Persist.Migration.Postgres
   , runMigration
   ) where
 
+import Control.Monad.IO.Class (MonadIO)
 import Data.Maybe (maybeToList)
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -25,11 +26,11 @@ import qualified Database.Persist.Migration.Core as Migration
 import Database.Persist.Sql (PersistValue, SqlPersistT, SqlType(..))
 
 -- | Run a migration with the Postgres backend.
-runMigration :: MigrateSettings -> Migration -> SqlPersistT IO ()
+runMigration :: (MonadIO m) => MigrateSettings -> Migration -> SqlPersistT m ()
 runMigration = Migration.runMigration backend
 
 -- | Get a migration with the Postgres backend.
-getMigration :: MigrateSettings -> Migration -> SqlPersistT IO [MigrateSql]
+getMigration :: (MonadIO m) => MigrateSettings -> Migration -> SqlPersistT m [MigrateSql]
 getMigration = Migration.getMigration backend
 
 -- | The migration backend for Postgres.
